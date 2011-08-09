@@ -26,15 +26,31 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String key = req.getParameter("query");
-		String pageStr = req.getParameter("page");
-		int page = 0;
-		if (pageStr != null) {
-			page = Integer.parseInt(pageStr);
+		String key = req.getParameter("q");
+		String startStr = req.getParameter("start");
+		String type = req.getParameter("type");
+		int start = 0;
+		if (startStr != null) {
+			start = Integer.parseInt(startStr);
 		}
 		
 		List<MusicItem> searchResults = null;
-		searchResults = SearchUtils.getResultsByKeyword(key, page);
+		if(type == null){
+			searchResults = SearchUtils.getResultsByKeyword(key, start);
+		}
+		else if(type.equals("category")){
+			searchResults = SearchUtils.getResultsByCategory(key, start);
+		}
+		else if(type.equals("download_count")){
+			searchResults = SearchUtils.getResultsByDownloadCount(start);
+		}
+		else if(type.equals("add_date")){
+			searchResults = SearchUtils.getResultsByDate(start);
+		}
+		else if(type.equals("artist")){
+			searchResults = SearchUtils.getResultsByArtist(key, start);
+		}
+		
 		
 		JSONArray jsonArray = new JSONArray();
 		for (MusicItem musicItem : searchResults) {

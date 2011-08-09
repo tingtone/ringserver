@@ -40,7 +40,7 @@ public class SearchUtils {
 	/*set full text search stuff for musicItem*/
 	public static void updateFTSStuffForMusicItem(MusicItem musicItem) {
 		StringBuffer sb = new StringBuffer();
-		sb.append(musicItem.getContent());
+		sb.append(musicItem.getMusicName());
 		
 		Set<String> new_ftsTokens = getTokensForIndexingOrQuery(
 				sb.toString(),
@@ -80,7 +80,7 @@ public class SearchUtils {
 	public static List<MusicItem> searchMusicItems(
 			String queryString,
 			PersistenceManager pm,
-			int page){
+			int start){
 		StringBuffer queryBuffer = new StringBuffer();
 		
 		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE ");
@@ -103,9 +103,7 @@ public class SearchUtils {
 		}
 		
 		Query query = pm.newQuery(queryBuffer.toString());
-
-		query.setRange(page*RESULTS_PER_PAGE, (page+1)*RESULTS_PER_PAGE);
-
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
 		query.declareParameters(declareParametersBuffer.toString());
 		
 		List<MusicItem> result = null;
@@ -132,5 +130,63 @@ public class SearchUtils {
 		}
 	}
 
-	
+	public static List<MusicItem> getResultsByCategory(String category, int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(MusicItem.class);
+		query.setFilter("category == lastParam");
+		query.declareParameters("String lastParam");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		
+		List<MusicItem> searchResults = null;
+		try{
+			searchResults = (List<MusicItem>) query.execute(category);
+		}finally{
+			query.closeAll();
+		}
+		return searchResults;
+	}
+
+	public static List<MusicItem> getResultsByDownloadCount(int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(MusicItem.class);
+		query.setOrdering("download_count desc");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		List<MusicItem> searchResult = null;
+		try{
+			searchResult = (List<MusicItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		return searchResult;
+	}
+
+	public static List<MusicItem> getResultsByDate(int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(MusicItem.class);
+		query.setOrdering("add_rate desc");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		List<MusicItem> searchResult = null;
+		try{
+			searchResult = (List<MusicItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		return searchResult;
+	}
+
+	public static List<MusicItem> getResultsByArtist(String artist, int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(MusicItem.class);
+		query.setFilter("artist == lastParam");
+		query.declareParameters("String lastParam");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		
+		List<MusicItem> searchResults = null;
+		try{
+			searchResults = (List<MusicItem>) query.execute(artist);
+		}finally{
+			query.closeAll();
+		}
+		return searchResults;
+	}
 }
