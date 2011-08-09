@@ -163,7 +163,7 @@ public class SearchUtils {
 	public static List<MusicItem> getResultsByDate(int start) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(MusicItem.class);
-		query.setOrdering("add_rate desc");
+		query.setOrdering("add_date desc");
 		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
 		List<MusicItem> searchResult = null;
 		try{
