@@ -2,23 +2,34 @@
 <web-app>
   
   <!-- Servlets -->
-   <servlet>
-    <servlet-name>MusicItem</servlet-name>
-    <servlet-class>com.kittypad.ringtone.MusicItemServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>Search</servlet-name>
-    <servlet-class>com.kittypad.ringtone.SearchServlet</servlet-class>
-  </servlet>
   
-  <servlet-mapping>
-    <servlet-name>MusicItem</servlet-name>
-    <url-pattern>/music</url-pattern>
-  </servlet-mapping>
+  	<servlet>
+    	<servlet-name>MusicItem</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.MusicItemServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>MusicItem</servlet-name>
+    	<url-pattern>/music</url-pattern>
+  	</servlet-mapping>
+  
+  
+	<servlet>
+    	<servlet-name>Search</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.SearchServlet</servlet-class>
+	</servlet>  
 	<servlet-mapping>
-    <servlet-name>Search</servlet-name>
-    <url-pattern>/search</url-pattern>
-  </servlet-mapping>
+    	<servlet-name>Search</servlet-name>
+    	<url-pattern>/search</url-pattern>
+	</servlet-mapping>
 
 
+	<servlet>
+    	<servlet-name>Delete</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.DeleteServlet</servlet-class>
+	</servlet>  
+	<servlet-mapping>
+    	<servlet-name>Delete</servlet-name>
+    	<url-pattern>/del</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
