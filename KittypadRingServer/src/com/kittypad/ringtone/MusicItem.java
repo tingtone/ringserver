@@ -3,6 +3,8 @@
  */
 
 package com.kittypad.ringtone;
+
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,13 +12,13 @@ import java.util.Set;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+
 
 
 
@@ -44,14 +46,34 @@ public class MusicItem {
 	@Persistent
 	private Set<String> fts;
 	
-	@NotPersistent
-	private String content;
+	
+	@Persistent
+	private String artist;
+	
+	@Persistent
+	private int download_count;
+	
+	@Persistent
+	private Date add_date;
 	
 	public void setKey(Key key){
 		this.key = key;
 	}
 	public void setFts(Set<String> fts){
 		this.fts = fts;
+	}
+	
+	public void setType(String type){
+		this.type = type;
+	}
+	
+	public void setArtist (String artist){
+		this.artist = artist;
+	}
+	
+	
+	public void setDownloadCount(int download_count){
+		this.download_count = download_count;
 	}
 	
 	public MusicItem(String UUID, String musicName, String category, Key key, String type, long size){
@@ -62,9 +84,10 @@ public class MusicItem {
 		this.type = type;
 		this.size = size;
 		
-		content = category + " " + musicName;
 		this.fts = new HashSet<String>();
-		SearchUtils.updateFTSStuffForMusicItem(this);	
+		SearchUtils.updateFTSStuffForMusicItem(this);
+		this.download_count = 0;
+		this.add_date = new Date();
 	}
 	
 	public String getUUID(){
@@ -94,8 +117,17 @@ public class MusicItem {
 		return fts;
 	}
 	
-	public String getContent(){
-		return content;
+	
+	public int getDownloadCount(){
+		return download_count;
+	}
+	
+	public Date getAddDate(){
+		return add_date;
+	}
+	
+	public String getArtist(){
+		return artist;
 	}
 	
 	public static void insert(String keyStr, String UUID, String musicName, String category, String type, long size){
