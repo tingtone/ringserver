@@ -18,9 +18,10 @@ public class DBInitHttpRequest {
 	static int totalFolderCount = 0;
 	static int totalFileCount = 0;
 	static int items = 0;
+	static int globalCount = 1;
 
 	public static void main(String[] args) throws FileNotFoundException{
-		String path = "/Users/apple/Desktop/Funny music";
+		String path = "/Users/liutou/Desktop/Funny music";
 		File file = new File(path);
 		System.out.println("Begin Scanning file "+ path);
 		if(!file.exists()){
@@ -57,14 +58,14 @@ public class DBInitHttpRequest {
 					category = "funny";
 					
 					String dir = path.substring(0, index);
-					String urlString = "http://kittypad-ringtone.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
+					String urlString = "http://kittypad-ring.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
 							"&musicName=" + URLEncoder.encode(musicName)+
 							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;
 					/*String urlString = "http://127.0.0.1:8888/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
 							"&musicName=" + URLEncoder.encode(musicName)+
 							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;*/
 					URL url;
-					System.out.println(musicName);
+					System.out.println((globalCount++)+":"+musicName);
 					try {
 						url = new URL(urlString);
 						url.openStream().close();

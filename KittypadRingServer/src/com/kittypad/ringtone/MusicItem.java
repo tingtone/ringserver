@@ -140,7 +140,7 @@ public class MusicItem {
 	public static List<MusicItem> getItems(){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(MusicItem.class);
-	//	query.setOrdering("when DESC");
+		//	query.setOrdering("when DESC");
 		List<MusicItem> items = (List<MusicItem>) query.execute();
 		return items;
 	}
