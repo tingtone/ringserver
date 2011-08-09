@@ -1,3 +1,13 @@
 .DS_Store
-RingtoneServer/war/WEB-INF/lib
-KittypadRingServer/war/WEB-INF/lib
+*.class
+RingtoneServer/war/WEB-INF/lib/appengine*.jar
+RingtoneServer/war/WEB-INF/lib/datanucleus*.jar
+RingtoneServer/war/WEB-INF/lib/geronimo*.jar
+RingtoneServer/war/WEB-INF/lib/jdo*.jar
+RingtoneServer/war/WEB-INF/lib/jsr*.jar
+
+KittypadRingServer/war/WEB-INF/lib/appengine*.jar
+KittypadRingServer/war/WEB-INF/lib/datanucleus*.jar
+KittypadRingServer/war/WEB-INF/lib/geronimo*.jar
+KittypadRingServer/war/WEB-INF/lib/jdo*.jar
+KittypadRingServer/war/WEB-INF/lib/jsr*.jar
