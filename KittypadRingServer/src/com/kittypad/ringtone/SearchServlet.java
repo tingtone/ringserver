@@ -35,7 +35,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		
 		List<MusicItem> searchResults = null;
-		if(type == null){
+		if(type == null || type.equals("keyword")){
 			searchResults = SearchUtils.getResultsByKeyword(key, start);
 		}
 		else if(type.equals("category")){
