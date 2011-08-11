@@ -22,14 +22,22 @@
     	<url-pattern>/search</url-pattern>
 	</servlet-mapping>
 
-
 	<servlet>
     	<servlet-name>Delete</servlet-name>
-    	<servlet-class>com.kittypad.ringtone.DeleteServlet</servlet-class>
+    	<servlet-class>com.kittypad.ringtone.utility.DeleteServlet</servlet-class>
 	</servlet>  
 	<servlet-mapping>
     	<servlet-name>Delete</servlet-name>
     	<url-pattern>/del</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    	<servlet-name>Stat</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.utility.StatServlet</servlet-class>
+	</servlet>  
+	<servlet-mapping>
+    	<servlet-name>Stat</servlet-name>
+    	<url-pattern>/stat</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -21,6 +22,7 @@ import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 
 import com.google.appengine.api.datastore.DatastoreNeedIndexException;
 import com.google.appengine.api.datastore.DatastoreTimeoutException;
+import com.kittypad.ringtone.utility.SharedUtils;
 
 public class SearchUtils {
 	private static final Logger log = Logger.getLogger(SearchUtils.class.getName());
@@ -165,6 +167,21 @@ public class SearchUtils {
 		Query query = pm.newQuery(MusicItem.class);
 		query.setOrdering("add_date desc");
 		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		List<MusicItem> searchResult = null;
+		try{
+			searchResult = (List<MusicItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		return searchResult;
+	}
+	
+	public static List<MusicItem> getResultsByRandom() {
+		int random = (int)(Math.random()*(SharedUtils.getTotalRingCount()-10));
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(MusicItem.class);
+		query.setOrdering("add_date desc");
+		query.setRange(random*RESULTS_PER_PAGE, (random+1)*RESULTS_PER_PAGE);
 		List<MusicItem> searchResult = null;
 		try{
 			searchResult = (List<MusicItem>) query.execute();

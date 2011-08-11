@@ -54,6 +54,12 @@ public class MusicItem {
 	private int download_count;
 	
 	@Persistent
+	private int avg_rate;
+	
+	@Persistent
+	private int rate_count;
+	
+	@Persistent
 	private Date add_date;
 	
 	public void setKey(Key key){
@@ -71,6 +77,21 @@ public class MusicItem {
 		this.artist = artist;
 	}
 	
+	public int getAvg_rate() {
+		return avg_rate;
+	}
+
+	public void setAvg_rate(int avgRate) {
+		this.avg_rate = avgRate;
+	}
+	
+	public int getRate_count() {
+		return rate_count;
+	}
+
+	public void setRate_count(int rateCount) {
+		this.rate_count = rateCount;
+	}
 	
 	public void setDownloadCount(int download_count){
 		this.download_count = download_count;
@@ -83,6 +104,8 @@ public class MusicItem {
 		this.setKey(key);
 		this.type = type;
 		this.size = size;
+		this.avg_rate = 0;
+		this.rate_count = 0;
 		
 		this.fts = new HashSet<String>();
 		SearchUtils.updateFTSStuffForMusicItem(this);

@@ -50,6 +50,9 @@ public class SearchServlet extends HttpServlet {
 		else if(type.equals("artist")){
 			searchResults = SearchUtils.getResultsByArtist(key, start);
 		}
+		else if(type.equals("random")) {
+			searchResults = SearchUtils.getResultsByRandom();
+		}
 		
 		
 		JSONArray jsonArray = new JSONArray();
@@ -60,6 +63,8 @@ public class SearchServlet extends HttpServlet {
 			musicMap.put("category", musicItem.getCategory());
 			musicMap.put("type", musicItem.getType());
 			musicMap.put("size", Long.toString(musicItem.getSize()));
+			musicMap.put("downloads", Integer.toString(musicItem.getDownloadCount()));
+			musicMap.put("rate", Integer.toString(musicItem.getAvg_rate()));
 			jsonArray.put(musicMap);
 		}
 		String response = null;
