@@ -181,7 +181,7 @@ public class SearchUtils {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(MusicItem.class);
 		query.setOrdering("add_date desc");
-		query.setRange(random*RESULTS_PER_PAGE, (random+1)*RESULTS_PER_PAGE);
+		query.setRange(random, random+10);
 		List<MusicItem> searchResult = null;
 		try{
 			searchResult = (List<MusicItem>) query.execute();
