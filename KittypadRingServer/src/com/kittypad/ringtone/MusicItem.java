@@ -104,12 +104,12 @@ public class MusicItem {
 		this.setKey(key);
 		this.type = type;
 		this.size = size;
-		this.avg_rate = 0;
-		this.rate_count = 0;
+		this.avg_rate = (int)(Math.random()*5+1);
+		this.rate_count = 1;
 		
 		this.fts = new HashSet<String>();
 		SearchUtils.updateFTSStuffForMusicItem(this);
-		this.download_count = 0;
+		this.download_count = (int)(Math.random()*2000+500);
 		this.add_date = new Date();
 	}
 	
