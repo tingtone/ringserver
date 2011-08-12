@@ -24,26 +24,30 @@ public class DataUpdateServlet extends HttpServlet{
 			start = Integer.parseInt(startStr);
 		}
 		
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append("SELECT * FROM " + MusicItem.class.getName());
-		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		
-		List<MusicItem> result = null;
-		Query query = pm.newQuery(queryBuffer.toString());
+		Query query = pm.newQuery(MusicItem.class);
 		query.setRange(start*500, (start+1)*500);
-		result = (List<MusicItem>) query.execute();
-		for(int i = 0 ; i<result.size(); i++){
-			MusicItem mItem = result.get(i);
-			mItem.setAvg_rate((int)(Math.random()*5+1));
-			mItem.setRate_count(1);
-			mItem.setDownloadCount((int)(Math.random()*2000+500));
-			pm.makePersistent(mItem);
+		List<MusicItem> searchResult = null;
+		try{
+			searchResult = (List<MusicItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		
+		for(int i = 0 ; i<searchResult.size(); i++){
+			MusicItem mItem = searchResult.get(i);
+			pm = PMF.get().getPersistenceManager();
+			MusicItem m = pm.getObjectById(MusicItem.class, mItem.getKey());
+			m.setAvg_rate((int)(Math.random()*5+1));
+			m.setRate_count(1);
+			m.setDownloadCount((int)(Math.random()*2000+500));
+			pm.close();	
 		}
 		PrintWriter pw;
 		try {
 			pw = response.getWriter();
-			pw.println("update " + result.size() + " items");
+			pw.println("update " + searchResult.size() + " items");
+		//	pw.println("update  items");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
