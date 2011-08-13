@@ -58,7 +58,13 @@ public class SearchServlet extends HttpServlet {
 		JSONArray jsonArray = new JSONArray();
 		for (MusicItem musicItem : searchResults) {
 			Map<String, String> musicMap = new HashMap<String, String>();
-			musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone/" + musicItem.getUUID()+musicItem.getMusicName()+"."+musicItem.getType());
+			if(musicItem.getType().equals("mp3")){
+				musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone/" + musicItem.getUUID()+musicItem.getMusicName()+"."+musicItem.getType());
+			}
+			else if(musicItem.getType().equals("mid")){
+				musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone_midi/" + musicItem.getUUID()+musicItem.getMusicName()+"."+musicItem.getType());
+			}
+			
 			musicMap.put("musicName", musicItem.getMusicName());
 			musicMap.put("category", musicItem.getCategory());
 			musicMap.put("type", musicItem.getType());
