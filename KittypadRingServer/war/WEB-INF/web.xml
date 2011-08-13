@@ -12,7 +12,14 @@
     	<url-pattern>/music</url-pattern>
   	</servlet-mapping>
   
-  
+  	<servlet>
+    	<servlet-name>Midi</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.MusicItemServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>MusicItem</servlet-name>
+    	<url-pattern>/music</url-pattern>
+  	</servlet-mapping>
 	<servlet>
     	<servlet-name>Search</servlet-name>
     	<servlet-class>com.kittypad.ringtone.SearchServlet</servlet-class>
