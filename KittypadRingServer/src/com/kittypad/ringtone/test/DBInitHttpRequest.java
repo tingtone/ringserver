@@ -1,6 +1,7 @@
-package com.kittypad.ringtone.DBInit;
+package com.kittypad.ringtone.test;
 /*copyright yanling
  *The main class to generate music lists and init Database 
+ *this is used to test in kittypad-ringtone.appspot
  */
 
 import java.io.File;
@@ -58,7 +59,7 @@ public class DBInitHttpRequest {
 					category = "funny";
 					
 					String dir = path.substring(0, index);
-					String urlString = "http://kittypad-ring.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
+					String urlString = "http://kittypad-ringtone.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
 							"&musicName=" + URLEncoder.encode(musicName)+
 							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;
 					/*String urlString = "http://127.0.0.1:8888/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+

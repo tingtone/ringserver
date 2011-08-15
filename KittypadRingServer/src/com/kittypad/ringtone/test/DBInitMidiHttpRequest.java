@@ -1,8 +1,4 @@
-package com.kittypad.ringtone.DBInit;
-/*copyright yanling
- *The main class to generate music lists and init Database 
- */
-
+package com.kittypad.ringtone.test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,15 +9,17 @@ import java.net.URLEncoder;
 import java.util.Scanner;
 import java.util.UUID;
 
-
-public class DBInitHttpRequest {
+/*copyright yanling
+ *The main class to generate music lists and init Database 
+ *this is used to test in kittypad-ringtone.appspot
+ */
+public class DBInitMidiHttpRequest {
 	static int totalFolderCount = 0;
 	static int totalFileCount = 0;
 	static int items = 0;
 	static int globalCount = 1;
-
 	public static void main(String[] args) throws FileNotFoundException{
-		String path = "/Users/apple/Desktop/Funny music";
+		String path = "/Users/apple/Desktop/midi";
 		File file = new File(path);
 		System.out.println("Begin Scanning file "+ path);
 		if(!file.exists()){
@@ -43,7 +41,7 @@ public class DBInitHttpRequest {
 			if(child.isDirectory()){
 				Init(child);
 			}
-			else if(fileName.equals("songlist.txt")){
+			else if(fileName.equals("midilist.txt")){
 				Scanner s = new Scanner(child);
 				while(s.hasNext()){
 					String line = s.nextLine();
@@ -55,15 +53,12 @@ public class DBInitHttpRequest {
 					String size = ss[4];
 					int index = path.lastIndexOf("/");
 					
-					category = "funny";
 					
 					String dir = path.substring(0, index);
-					String urlString = "http://kittypad-ring.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
+					String urlString = "http://kittypad-ringtone.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
 							"&musicName=" + URLEncoder.encode(musicName)+
 							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;
-					/*String urlString = "http://127.0.0.1:8888/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
-							"&musicName=" + URLEncoder.encode(musicName)+
-							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;*/
+				//	System.out.println(urlString);
 					URL url;
 					System.out.println((globalCount++)+":"+musicName);
 					try {
@@ -86,7 +81,7 @@ public class DBInitHttpRequest {
 	/*generate music list for every sub folder*/
 	static void generateList(File f) throws FileNotFoundException{
 		String path = f.getAbsolutePath();
-		File songlist = new File(path+"/songlist.txt");
+		File songlist = new File(path+"/midilist.txt");
 		PrintWriter pw = new PrintWriter(songlist); 
 		File[] ff = f.listFiles();
 		for(File child:ff){
@@ -94,13 +89,13 @@ public class DBInitHttpRequest {
 				totalFolderCount++;
 				generateList(child);
 			}else{
-				if(child.getName().contains(".mp3") && !child.getName().equals(".mp3")){
+				if(child.getName().contains(".mid") && !child.getName().equals(".mid")){
 					UUID id = UUID.randomUUID();
 					String fileName = child.getName();
-					String musicName = fileName.split(".mp3")[0]; //get music name exclude the suffix
+					String musicName = fileName.split(".mid")[0]; //get music name exclude the suffix
 					int temp = path.lastIndexOf("/");
 					String category = path.substring(temp+1,path.length()); //get category
-					String type = "mp3";
+					String type = "mid";
 					long size = child.length();
 					pw.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
 					items++;
