@@ -6,12 +6,10 @@ package com.kittypad.ringtone.DBInit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Scanner;
-import java.util.UUID;
 
 
 public class DBInitHttpRequest {
@@ -28,9 +26,7 @@ public class DBInitHttpRequest {
 			System.out.println("File Not Exist");
 		}
 		System.out.println("Begin generating music list and add it to database");
-	//	generateList(file); //this function is used to generate music list in every folder
 		Init(file); //read all musiclist and add them to database
-	//	System.out.println("Generating list and add it to database over");
 		System.out.println("There are"+ items+" music files");	
 	}
 	
@@ -82,31 +78,5 @@ public class DBInitHttpRequest {
 				}
 			}
 		}
-	}
-	/*generate music list for every sub folder*/
-	static void generateList(File f) throws FileNotFoundException{
-		String path = f.getAbsolutePath();
-		File songlist = new File(path+"/songlist.txt");
-		PrintWriter pw = new PrintWriter(songlist); 
-		File[] ff = f.listFiles();
-		for(File child:ff){
-			if(child.isDirectory()){
-				totalFolderCount++;
-				generateList(child);
-			}else{
-				if(child.getName().contains(".mp3") && !child.getName().equals(".mp3")){
-					UUID id = UUID.randomUUID();
-					String fileName = child.getName();
-					String musicName = fileName.split(".mp3")[0]; //get music name exclude the suffix
-					int temp = path.lastIndexOf("/");
-					String category = path.substring(temp+1,path.length()); //get category
-					String type = "mp3";
-					long size = child.length();
-					pw.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
-					items++;
-				}	
-			}		
-		}
-		pw.close();
 	}
 }

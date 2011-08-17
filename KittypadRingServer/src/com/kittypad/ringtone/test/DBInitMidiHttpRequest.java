@@ -26,9 +26,7 @@ public class DBInitMidiHttpRequest {
 			System.out.println("File Not Exist");
 		}
 		System.out.println("Begin generating music list and add it to database");
-	//	generateList(file); //this function is used to generate music list in every folder
 		Init(file); //read all musiclist and add them to database
-	//	System.out.println("Generating list and add it to database over");
 		System.out.println("There are"+ items+" music files");	
 	}
 	
@@ -77,31 +75,5 @@ public class DBInitMidiHttpRequest {
 				}
 			}
 		}
-	}
-	/*generate music list for every sub folder*/
-	static void generateList(File f) throws FileNotFoundException{
-		String path = f.getAbsolutePath();
-		File songlist = new File(path+"/midilist.txt");
-		PrintWriter pw = new PrintWriter(songlist); 
-		File[] ff = f.listFiles();
-		for(File child:ff){
-			if(child.isDirectory()){
-				totalFolderCount++;
-				generateList(child);
-			}else{
-				if(child.getName().contains(".mid") && !child.getName().equals(".mid")){
-					UUID id = UUID.randomUUID();
-					String fileName = child.getName();
-					String musicName = fileName.split(".mid")[0]; //get music name exclude the suffix
-					int temp = path.lastIndexOf("/");
-					String category = path.substring(temp+1,path.length()); //get category
-					String type = "mid";
-					long size = child.length();
-					pw.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
-					items++;
-				}	
-			}		
-		}
-		pw.close();
 	}
 }
