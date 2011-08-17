@@ -169,7 +169,7 @@ public class FileProcessUtils {
 				if(child.getName().contains(".mp3") && !child.getName().equals(".mp3")){
 					UUID id = UUID.randomUUID();
 					String fileName = child.getName();
-					String musicName = fileName.split(".mp3")[0]; //get music name exclude the suffix
+					String musicName = fileName.split("\\.mp3")[0]; //get music name exclude the suffix
 					int temp = path.lastIndexOf("/");
 					String category = path.substring(temp+1,path.length()); //get category
 					String type = "mp3";
@@ -195,7 +195,7 @@ public class FileProcessUtils {
 				if(child.getName().contains(".mid") && !child.getName().equals(".mid")){
 					UUID id = UUID.randomUUID();
 					String fileName = child.getName();
-					String musicName = fileName.split(".mid")[0]; //get music name exclude the suffix
+					String musicName = fileName.substring(0, fileName.length()-4); //get music name exclude the suffix
 					int temp = path.lastIndexOf("/");
 					String category = path.substring(temp+1,path.length()); //get category
 					String type = "mid";
@@ -229,12 +229,10 @@ public class FileProcessUtils {
 					
 					String fileName = child.getName();
 					int index = UUID.randomUUID().toString().length();
-					String id = child.getName().substring(0, index+1);
-					if(child.getName().charAt(index+1) == '_'){
-						index ++;
-					}
+					String id = child.getName().substring(0, index);
+					
 					String nameString = fileName.substring(index, fileName.length());
-					String musicName = nameString.split(".mid")[0]; //get music name exclude the suffix
+					String musicName = nameString.substring(0, nameString.length()-4); //get music name exclude the suffix
 					int temp = path.lastIndexOf("/");
 					String category = path.substring(temp+1,path.length()); //get category
 					String type = "mid";
