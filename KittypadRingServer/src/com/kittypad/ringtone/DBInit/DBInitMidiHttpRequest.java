@@ -14,19 +14,19 @@ public class DBInitMidiHttpRequest {
 	static int items = 0;
 	static int globalCount = 1;
 	public static void main(String[] args) throws FileNotFoundException{
-		String path = "/Users/apple/Desktop/midi";
-		String path1 = "/Users/apple/Desktop/midi1";
-		String path2 = "/Users/apple/Desktop/midi2";
+		String path = "/Users/apple/Desktop/midi1";
+	//	String path1 = "/Users/apple/Desktop/midi2";
+	//	String path2 = "/Users/apple/Desktop/midi3";
 		File file = new File(path);
-		File file1 = new File(path1);
-		File file2 = new File(path2);
+	//	File file1 = new File(path1);
+	//	File file2 = new File(path2);
 		System.out.println("Begin Scanning file "+ path);
 		if(!file.exists()){
 			System.out.println("File Not Exist");
 		}
 		System.out.println("Begin generating music list and add it to database");
 		Init(file); //read all musiclist and add them to database
-		
+		/*
 		if(!file1.exists()){
 			System.out.println("File Not Exist");
 		}
@@ -38,7 +38,7 @@ public class DBInitMidiHttpRequest {
 		}
 		System.out.println("Begin generating music list and add it to database");
 		Init(file2); //read all musiclist and add them to database
-		
+		*/
 		System.out.println("There are"+ items+" music files");	
 	}
 	
