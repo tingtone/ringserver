@@ -205,4 +205,20 @@ public class SearchUtils {
 		}
 		return searchResults;
 	}
+
+	
+	public static void updateFTSStuffForM4rItem(M4rItem m4rItem) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(m4rItem.getMusicName());
+		
+		Set<String> new_ftsTokens = getTokensForIndexingOrQuery(
+				sb.toString(),
+				MAX_NUMBER_OF_WORDS_TO_PUT_IN_INDEX);
+		Set<String> ftsTokens = m4rItem.getFts();
+		ftsTokens.clear();
+		for(String token : new_ftsTokens){
+			ftsTokens.add(token);
+		}
+		
+	}
 }
