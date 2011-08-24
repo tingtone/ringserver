@@ -1,5 +1,12 @@
 package com.kittypad.ringtone.fileupload;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
 /*Codes here are just used to backup
  * Anyone who needs to use this function needs to refer to Amason S3 interfaces and import the Libraries
  */
@@ -39,6 +46,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 public class S3Sample {
     public static String bucketName = "kittypad_ringtone";
 	public static String bucketName = "kittypad_ringtone_midi";
+	public static String bucketName = "kittypad_ringtone_m4r";
     public static AmazonS3 s3;
     public static ObjectListing objectListing;
     public static int uploadCount = 0;
@@ -76,6 +84,13 @@ public class S3Sample {
      			System.out.println("File Not Exist");
      		}
      		uploadmidi(file);
+     		
+     		String path = "/Users/apple/Desktop/m4r";
+    		File file = new File(path);
+    		if(!file.exists()){
+    			System.out.println("File Not Exist");
+    		}
+    		uploadm4r(file);
             
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means your request made it "
@@ -162,6 +177,34 @@ public class S3Sample {
 		}
 	}
     
+    
+    static void uploadm4r(File f) throws FileNotFoundException{
+		File[] ff = f.listFiles();
+		for(File child:ff){
+			String fileName = child.getName();
+			if(child.isDirectory()){
+				uploadmidi(child);
+			}
+			else if(fileName.equals("m4rlist.txt")){
+				Scanner s = new Scanner(child);
+				while(s.hasNext()){
+					String line = s.nextLine();
+					String[] ss = line.split("\\*");
+					String id = ss[0];
+					String musicName = ss[1];
+					String type = ss[3];
+					String path = f.getAbsolutePath()+"/"+id+musicName+"."+type;
+					String key = id+musicName+"."+type;
+					System.out.println("Uploading "+path + " to S3 from a file count number is " + (uploadCount++));
+					if(uploadCount >= 0){
+						s3.putObject(new PutObjectRequest(bucketName, key, new File(path)));
+						s3.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+					}
+				}
+			}
+		}
+	}
+	
     static void upload(File f) throws FileNotFoundException{
 		File[] ff = f.listFiles();
 		for(File child:ff){
