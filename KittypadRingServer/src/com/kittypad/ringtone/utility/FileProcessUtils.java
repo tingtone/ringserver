@@ -19,10 +19,23 @@ public class FileProcessUtils {
 	public static void main(String[] args){
 	//	String mp3Path = "/Users/apple/Desktop/Funny music";
 	//	String midiPath = "/Users/apple/Desktop/midi/";
-		String midiPath1 = "/Users/apple/Desktop/midi1/";
-		String midiPath2 = "/Users/apple/Desktop/midi2/";
+	//	String midiPath1 = "/Users/apple/Desktop/midi1/";
+	//	String midiPath2 = "/Users/apple/Desktop/midi2/";
 	//	processMidiFileName(midiPath);
-		File file = new File(midiPath1);
+		String m4rPath = "/Users/apple/Desktop/m4r/";
+		File file = new File(m4rPath);
+		System.out.println("Begin Scanning file "+ m4rPath);
+		if(!file.exists()){
+			System.out.println("File Not Exist");
+		}	
+		try {
+			generateM4rListFromS3Files(file);
+			System.out.println("Generate M4r list over");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	/*	File file = new File(midiPath1);
 		System.out.println("Begin Scanning file "+ midiPath1);
 		if(!file.exists()){
 			System.out.println("File Not Exist");
@@ -46,7 +59,7 @@ public class FileProcessUtils {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	private static void processMp3FileName(String path){
@@ -239,6 +252,44 @@ public class FileProcessUtils {
 					category = "midi";
 					long size = child.length();
 					if(size > 40960  || size < 500){ //exclude files with size larger than 40K and smaller then 0.5K
+					}
+					else {
+						pw.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
+					//	System.out.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
+
+					}
+				}	
+			}		
+		}
+		pw.close();
+	}
+	
+	/*generate M4r music list for files download from s3
+	 * the name of every file is UUID+midiName
+	 * In this method, we extract UUID and midiName and save them in midilist.txt in every subfolder*/
+	static void generateM4rListFromS3Files(File f) throws FileNotFoundException{
+		String path = f.getAbsolutePath();
+		File songlist = new File(path+"/m4rlist.txt");
+		PrintWriter pw = new PrintWriter(songlist); 
+		File[] ff = f.listFiles();
+		for(File child:ff){
+			if(child.isDirectory()){
+				generateMidiListFromS3Files(child);
+			}else{
+				if(child.getName().contains(".m4r") && !child.getName().equals(".m4r")){
+					
+					String fileName = child.getName();
+					int index = UUID.randomUUID().toString().length();
+					String id = child.getName().substring(0, index);
+					
+					String nameString = fileName.substring(index, fileName.length());
+					String musicName = nameString.substring(0, nameString.length()-4); //get music name exclude the suffix
+					int temp = path.lastIndexOf("/");
+					String category = path.substring(temp+1,path.length()); //get category
+					String type = "m4r";
+					category = "m4r";
+					long size = child.length();
+					if(size > 1024000  || size < 500){ //exclude files with size larger than 1000K and smaller then 0.5K
 					}
 					else {
 						pw.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);

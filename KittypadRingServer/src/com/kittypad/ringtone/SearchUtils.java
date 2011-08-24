@@ -206,7 +206,7 @@ public class SearchUtils {
 		return searchResults;
 	}
 
-	
+	/*methods for IOS as follows*/
 	public static void updateFTSStuffForM4rItem(M4rItem m4rItem) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(m4rItem.getMusicName());
@@ -220,5 +220,132 @@ public class SearchUtils {
 			ftsTokens.add(token);
 		}
 		
+	}
+	public static List<M4rItem> searchM4rItems(
+			String queryString,
+			PersistenceManager pm,
+			int start){
+		StringBuffer queryBuffer = new StringBuffer();
+		
+		queryBuffer.append("SELECT FROM " + M4rItem.class.getName() + " WHERE ");
+		
+		Set<String> queryTokens = getTokensForIndexingOrQuery(
+				queryString,
+				MAXIMUM_NUMBER_OF_WORDS_TO_SEARCH);
+		List<String> parametersForSearch = new ArrayList<String>(queryTokens);
+		
+		StringBuffer declareParametersBuffer = new StringBuffer();
+		int parameterCounter = 0;
+		while(parameterCounter < queryTokens.size()){
+			queryBuffer.append("fts == param" + parameterCounter);
+			declareParametersBuffer.append("String param" + parameterCounter);
+			if(parameterCounter + 1 < queryTokens.size()){
+				queryBuffer.append(" && ");
+				declareParametersBuffer.append(", ");
+			}
+			parameterCounter++;
+		}
+		
+		Query query = pm.newQuery(queryBuffer.toString());
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		query.declareParameters(declareParametersBuffer.toString());
+		
+		List<M4rItem> result = null;
+		try{
+			result = (List<M4rItem>) query.executeWithArray(parametersForSearch.toArray());
+		}catch (DatastoreTimeoutException e){
+			log.severe(e.getMessage());
+			log.severe("datastore timeout at: " + queryString);
+		}catch(DatastoreNeedIndexException e) {
+			log.severe(e.getMessage());
+			log.severe("datastore need index exception at: " + queryString);
+		}
+		return result;
+		
+	}
+	
+	public static List<M4rItem> getResultsByKeywordIOS(String key, int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<M4rItem> searchResults = searchM4rItems(key, pm, start);
+		if (searchResults != null) {
+			return searchResults;
+		} else {
+			return new ArrayList<M4rItem>();
+		}
+	}
+
+	public static List<M4rItem> getResultsByCategoryIOS(String category, int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(M4rItem.class);
+		query.setFilter("category == lastParam");
+		query.declareParameters("String lastParam");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		
+		List<M4rItem> searchResults = null;
+		try{
+			searchResults = (List<M4rItem>) query.execute(category);
+		}finally{
+			query.closeAll();
+		}
+		return searchResults;
+	}
+
+	public static List<M4rItem> getResultsByDownloadCountIOS(int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(M4rItem.class);
+		query.setOrdering("download_count desc");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		List<M4rItem> searchResult = null;
+		try{
+			searchResult = (List<M4rItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		return searchResult;
+	}
+
+	public static List<M4rItem> getResultsByDateIOS(int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(M4rItem.class);
+		query.setOrdering("add_date desc");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		List<M4rItem> searchResult = null;
+		try{
+			searchResult = (List<M4rItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		return searchResult;
+	}
+	
+	public static List<M4rItem> getResultsByRandomIOS() {
+		int random = (int)(Math.random()*(SharedUtils.getTotalRingCount()-10));
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(M4rItem.class);
+		query.setOrdering("add_date desc");
+		query.setRange(random, random+10);
+		List<M4rItem> searchResult = null;
+		try{
+			searchResult = (List<M4rItem>) query.execute();
+		}finally{
+			query.closeAll();
+		}
+		return searchResult;
+	}
+
+	public static List<M4rItem> getResultsByArtistIOS(String artist, int start) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(M4rItem.class);
+		query.setFilter("artist == lastParam");
+		query.declareParameters("String lastParam");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		
+		List<M4rItem> searchResults = null;
+		try{
+			searchResults = (List<M4rItem>) query.execute(artist);
+		}finally{
+			query.closeAll();
+		}
+		return searchResults;
 	}
 }

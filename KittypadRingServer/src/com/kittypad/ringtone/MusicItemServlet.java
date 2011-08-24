@@ -20,6 +20,11 @@ public class MusicItemServlet extends HttpServlet{
 		String keyStr = request.getParameter("keyStr");
 		String type = request.getParameter("type");
 		long size = Long.parseLong(request.getParameter("size"));
-		MusicItem.insert(keyStr, UUID, musicName, category, type, size);
+		if(type.equals("m4r") || type.equals("aac")){
+			M4rItem.insert(keyStr, UUID, musicName, category, type, size);
+		}
+		else{
+			MusicItem.insert(keyStr, UUID, musicName, category, type, size);
+		}		
 	}
 }
