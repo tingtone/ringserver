@@ -154,7 +154,7 @@ public class M4rItem {
 	}
 	
 	public static void insert(String keyStr, String UUID, String musicName, String category, String type, long size){
-		Key key = KeyFactory.createKey(MusicItem.class.getSimpleName(), keyStr);
+		Key key = KeyFactory.createKey(M4rItem.class.getSimpleName(), keyStr);
 		M4rItem item = new M4rItem(UUID, musicName, category, key, type, size);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		pm.makePersistent(item);

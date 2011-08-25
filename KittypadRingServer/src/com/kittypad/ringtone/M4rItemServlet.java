@@ -1,16 +1,11 @@
 package com.kittypad.ringtone;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
- * use this servlet to init the music database
- * There is an application HttpRequest to provide all music info
- */
-public class MusicItemServlet extends HttpServlet{
-	/**
-	 * 
-	 */
+
+public class M4rItemServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response){
@@ -21,9 +16,7 @@ public class MusicItemServlet extends HttpServlet{
 		String type = request.getParameter("type");
 		long size = Long.parseLong(request.getParameter("size"));
 		if(type.equals("m4r") || type.equals("aac")){
-		}
-		else{
-			MusicItem.insert(keyStr, UUID, musicName, category, type, size);
+			M4rItem.insert(keyStr, UUID, musicName, category, type, size);
 		}		
 	}
 }

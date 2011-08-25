@@ -274,8 +274,17 @@ public class FileProcessUtils {
 		File[] ff = f.listFiles();
 		for(File child:ff){
 			if(child.isDirectory()){
-				generateMidiListFromS3Files(child);
+				generateM4rListFromS3Files(child);
 			}else{
+				String nameStr = child.getName();
+				if(nameStr.contains(" ")){
+					nameStr = nameStr.split(" ")[1];
+				}
+				if(nameStr.contains(".m4a")){
+					nameStr = path+"/"+nameStr.split("\\.m4a")[0]+".m4r";
+					System.out.println(nameStr);
+					child.renameTo(new File(nameStr));
+				}
 				if(child.getName().contains(".m4r") && !child.getName().equals(".m4r")){
 					
 					String fileName = child.getName();
@@ -293,7 +302,7 @@ public class FileProcessUtils {
 					}
 					else {
 						pw.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
-					//	System.out.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
+						System.out.println(id+"*" + musicName + "*" +category +"*"+type+"*"+size);
 
 					}
 				}	

@@ -20,6 +20,16 @@
     	<servlet-name>MusicItem</servlet-name>
     	<url-pattern>/music</url-pattern>
   	</servlet-mapping>
+  	
+  	<servlet>
+    	<servlet-name>M4rItem</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.M4rItemServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>M4rItem</servlet-name>
+    	<url-pattern>/music</url-pattern>
+  	</servlet-mapping>
+  	
 	<servlet>
     	<servlet-name>Search</servlet-name>
     	<servlet-class>com.kittypad.ringtone.SearchServlet</servlet-class>

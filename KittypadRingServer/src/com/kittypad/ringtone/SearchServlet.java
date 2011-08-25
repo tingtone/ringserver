@@ -79,7 +79,9 @@ public class SearchServlet extends HttpServlet {
 				jsonArray.put(musicMap);
 			}
 		}
+		
 		else if(platform.equals("iOS")){  //platform is iOS
+		//	List<M4rItem> searchResults = null;
 			List<MusicItem> searchResults = null;
 			if(type == null || type.equals("keyword")){
 				searchResults = SearchUtils.getResultsByKeywordIOS(key, start);
@@ -102,21 +104,21 @@ public class SearchServlet extends HttpServlet {
 			
 			
 			
-			for (MusicItem musicItem : searchResults) {
+			for (MusicItem m4rItem : searchResults) {
 				Map<String, String> musicMap = new HashMap<String, String>();
-				if(musicItem.getType().equals("mp3")){
-					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone/" + musicItem.getUUID()+musicItem.getMusicName()+"."+musicItem.getType());
+				if(m4rItem.getType().equals("mp3")){
+					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone/" + m4rItem.getUUID()+m4rItem.getMusicName()+"."+m4rItem.getType());
 				}
-				else if(musicItem.getType().equals("mid")){
-					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone_midi/" + musicItem.getUUID()+musicItem.getMusicName()+"."+musicItem.getType());
+				else if(m4rItem.getType().equals("mid")){
+					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone_midi/" + m4rItem.getUUID()+m4rItem.getMusicName()+"."+m4rItem.getType());
 				}
 				
-				musicMap.put("musicName", musicItem.getMusicName());
-				musicMap.put("category", musicItem.getCategory());
-				musicMap.put("type", musicItem.getType());
-				musicMap.put("size", Long.toString(musicItem.getSize()));
-				musicMap.put("downloads", Integer.toString(musicItem.getDownloadCount()));
-				musicMap.put("rate", Integer.toString(musicItem.getAvg_rate()));
+				musicMap.put("musicName", m4rItem.getMusicName());
+				musicMap.put("category", m4rItem.getCategory());
+				musicMap.put("type", m4rItem.getType());
+				musicMap.put("size", Long.toString(m4rItem.getSize()));
+				musicMap.put("downloads", Integer.toString(m4rItem.getDownloadCount()));
+				musicMap.put("rate", Integer.toString(m4rItem.getAvg_rate()));
 				jsonArray.put(musicMap);
 			}
 		}

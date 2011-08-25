@@ -68,8 +68,8 @@ public class DBInitMidiHttpRequest {
 					String urlString = "http://kittypad-ring.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
 							"&musicName=" + URLEncoder.encode(musicName)+
 							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;
-				//	System.out.println(urlString);
-					URL url;
+					System.out.println(urlString);
+				/*	URL url;
 					System.out.println((globalCount++)+":"+musicName);
 					try {
 						url = new URL(urlString);
@@ -82,7 +82,7 @@ public class DBInitMidiHttpRequest {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						System.exit(0);
-					}
+					}*/
 					items++;
 				}
 			}
