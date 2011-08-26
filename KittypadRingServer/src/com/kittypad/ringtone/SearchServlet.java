@@ -82,7 +82,7 @@ public class SearchServlet extends HttpServlet {
 		
 		else if(platform.equals("iOS")){  //platform is iOS
 		//	List<M4rItem> searchResults = null;
-			List<MusicItem> searchResults = null;
+			List<Mp3Item> searchResults = null;
 			if(type == null || type.equals("keyword")){
 				searchResults = SearchUtils.getResultsByKeywordIOS(key, start);
 			}
@@ -104,21 +104,21 @@ public class SearchServlet extends HttpServlet {
 			
 			
 			
-			for (MusicItem m4rItem : searchResults) {
+			for (Mp3Item mp3Item : searchResults) {
 				Map<String, String> musicMap = new HashMap<String, String>();
-				if(m4rItem.getType().equals("mp3")){
-					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone/" + m4rItem.getUUID()+m4rItem.getMusicName()+"."+m4rItem.getType());
+				if(mp3Item.getType().equals("mp3")){
+					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone/" + mp3Item.getUUID()+mp3Item.getMusicName()+"."+mp3Item.getType());
 				}
-				else if(m4rItem.getType().equals("mid")){
-					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone_midi/" + m4rItem.getUUID()+m4rItem.getMusicName()+"."+m4rItem.getType());
+				else if(mp3Item.getType().equals("mid")){
+					musicMap.put("url", "https://s3.amazonaws.com/kittypad_ringtone_midi/" + mp3Item.getUUID()+mp3Item.getMusicName()+"."+mp3Item.getType());
 				}
 				
-				musicMap.put("musicName", m4rItem.getMusicName());
-				musicMap.put("category", m4rItem.getCategory());
-				musicMap.put("type", m4rItem.getType());
-				musicMap.put("size", Long.toString(m4rItem.getSize()));
-				musicMap.put("downloads", Integer.toString(m4rItem.getDownloadCount()));
-				musicMap.put("rate", Integer.toString(m4rItem.getAvg_rate()));
+				musicMap.put("musicName", mp3Item.getMusicName());
+				musicMap.put("category", mp3Item.getCategory());
+				musicMap.put("type", mp3Item.getType());
+				musicMap.put("size", Long.toString(mp3Item.getSize()));
+				musicMap.put("downloads", Integer.toString(mp3Item.getDownloadCount()));
+				musicMap.put("rate", Integer.toString(mp3Item.getAvg_rate()));
 				jsonArray.put(musicMap);
 			}
 		}

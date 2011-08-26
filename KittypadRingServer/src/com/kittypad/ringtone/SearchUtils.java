@@ -207,6 +207,7 @@ public class SearchUtils {
 	}
 
 	/*methods for IOS as follows*/
+	
 	public static void updateFTSStuffForM4rItem(M4rItem m4rItem) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(m4rItem.getMusicName());
@@ -218,17 +219,32 @@ public class SearchUtils {
 		ftsTokens.clear();
 		for(String token : new_ftsTokens){
 			ftsTokens.add(token);
+		}	
+	}
+	
+	
+	public static void updateFTSStuffForMp3Item(Mp3Item mp3Item) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(mp3Item.getMusicName());
+		
+		Set<String> new_ftsTokens = getTokensForIndexingOrQuery(
+				sb.toString(),
+				MAX_NUMBER_OF_WORDS_TO_PUT_IN_INDEX);
+		Set<String> ftsTokens = mp3Item.getFts();
+		ftsTokens.clear();
+		for(String token : new_ftsTokens){
+			ftsTokens.add(token);
 		}
 		
 	}
 
-	public static List<MusicItem> searchMusicItemsIOS(
+	public static List<Mp3Item> searchMusicItemsIOS(
 			String queryString,
 			PersistenceManager pm,
 			int start){
 		StringBuffer queryBuffer = new StringBuffer();
 		
-		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE ");
+		queryBuffer.append("SELECT FROM " + Mp3Item.class.getName() + " WHERE ");
 		
 		Set<String> queryTokens = getTokensForIndexingOrQuery(
 				queryString,
@@ -246,16 +262,14 @@ public class SearchUtils {
 			}
 			parameterCounter++;
 		}
-		parametersForSearch.add("mp3");
-		queryBuffer.append(" && type == param" + parameterCounter);
-		declareParametersBuffer.append(", String param" + parameterCounter);
+		
 		
 		Query query = pm.newQuery(queryBuffer.toString());
 		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
 		query.declareParameters(declareParametersBuffer.toString());
-		List<MusicItem> result = null;
+		List<Mp3Item> result = null;
 		try{
-			result = (List<MusicItem>) query.executeWithArray(parametersForSearch.toArray());
+			result = (List<Mp3Item>) query.executeWithArray(parametersForSearch.toArray());
 		}catch (DatastoreTimeoutException e){
 			log.severe(e.getMessage());
 			log.severe("datastore timeout at: " + queryString);
@@ -266,104 +280,85 @@ public class SearchUtils {
 		return result;	
 	}
 	
-	public static List<MusicItem> getResultsByKeywordIOS(String key, int start) {
+	public static List<Mp3Item> getResultsByKeywordIOS(String key, int start) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		List<MusicItem> searchResults = searchMusicItemsIOS(key, pm, start);
+		List<Mp3Item> searchResults = searchMusicItemsIOS(key, pm, start);
 		if (searchResults != null) {
 			return searchResults;
 		} else {
-			return new ArrayList<MusicItem>();
+			return new ArrayList<Mp3Item>();
 		}
 	}
 
-	public static List<MusicItem> getResultsByCategoryIOS(String category, int start) {
+	public static List<Mp3Item> getResultsByCategoryIOS(String category, int start) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		
-		
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE category == param1 && type == param2");
-		Query query = pm.newQuery(queryBuffer.toString());
-		query.declareParameters("String param1, String param2");
+		Query query = pm.newQuery(Mp3Item.class);
+		query.setFilter("category == lastParam");
+		query.declareParameters("String lastParam");
 		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
-		List<String> parametersForSearch = new ArrayList<String>();
-		parametersForSearch.add(category);
-		parametersForSearch.add("mp3");
-		List<MusicItem> searchResults = null;
+		
+		List<Mp3Item> searchResults = null;
 		try{
-			searchResults = (List<MusicItem>) query.execute(parametersForSearch.toArray());
+			searchResults = (List<Mp3Item>) query.execute(category);
 		}finally{
 			query.closeAll();
 		}
 		return searchResults;
 	}
 
-	public static List<MusicItem> getResultsByDownloadCountIOS(int start) {
+	public static List<Mp3Item> getResultsByDownloadCountIOS(int start) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE type == param");
-		Query query = pm.newQuery(queryBuffer.toString());
-		query.declareParameters("String param");
-		query.setOrdering("type desc");
-	//	query.setOrdering("download_count desc");
-	//	query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
-		List<MusicItem> searchResult = null;
+		Query query = pm.newQuery(Mp3Item.class);
+		query.setOrdering("download_count desc");
+		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
+		List<Mp3Item> searchResult = null;
 		try{
-			searchResult = (List<MusicItem>) query.execute("mp3");
+			searchResult = (List<Mp3Item>) query.execute();
 		}finally{
 			query.closeAll();
 		}
 		return searchResult;
 	}
 
-	public static List<MusicItem> getResultsByDateIOS(int start) {
+	public static List<Mp3Item> getResultsByDateIOS(int start) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE type == param");
-		Query query = pm.newQuery(queryBuffer.toString());
-		query.declareParameters("String param");
+		Query query = pm.newQuery(Mp3Item.class);
 		query.setOrdering("add_date desc");
 		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
-		List<MusicItem> searchResult = null;
+		List<Mp3Item> searchResult = null;
 		try{
-			searchResult = (List<MusicItem>) query.execute("mp3");
+			searchResult = (List<Mp3Item>) query.execute();
 		}finally{
 			query.closeAll();
 		}
 		return searchResult;
 	}
 	
-	public static List<MusicItem> getResultsByRandomIOS() {
-		int random = (int)(Math.random()*(SharedUtils.getTotalRingCount()/3));
+	public static List<Mp3Item> getResultsByRandomIOS() {
+		int random = (int)(Math.random()*(6375-10));
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE type == param");
-		Query query = pm.newQuery(queryBuffer.toString());
-		query.declareParameters("String param");
-	//	query.setOrdering("add_date desc");
+		Query query = pm.newQuery(Mp3Item.class);
+		query.setOrdering("add_date desc");
 		query.setRange(random, random+10);
-		List<MusicItem> searchResult = null;
+		List<Mp3Item> searchResult = null;
 		try{
-			searchResult = (List<MusicItem>) query.execute("mp3");
+			searchResult = (List<Mp3Item>) query.execute();
 		}finally{
 			query.closeAll();
 		}
 		return searchResult;
 	}
 
-	public static List<MusicItem> getResultsByArtistIOS(String artist, int start) {
+	public static List<Mp3Item> getResultsByArtistIOS(String artist, int start) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append("SELECT FROM " + MusicItem.class.getName() + " WHERE artist == param1 && type == param2");
-		Query query = pm.newQuery(queryBuffer.toString());
-		query.declareParameters("String Param1, String Param2");
+		Query query = pm.newQuery(Mp3Item.class);
+		query.setFilter("artist == lastParam");
+		query.declareParameters("String lastParam");
 		query.setRange(start*RESULTS_PER_PAGE, (start+1)*RESULTS_PER_PAGE);
 		
-		List<String> parametersForSearch = new ArrayList<String>();
-		parametersForSearch.add(artist);
-		parametersForSearch.add("mp3");
-		List<MusicItem> searchResults = null;
+		List<Mp3Item> searchResults = null;
 		try{
-			searchResults = (List<MusicItem>) query.execute(parametersForSearch);
+			searchResults = (List<Mp3Item>) query.execute(artist);
 		}finally{
 			query.closeAll();
 		}

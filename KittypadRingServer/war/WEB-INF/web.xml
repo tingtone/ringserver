@@ -11,13 +11,23 @@
     	<servlet-name>MusicItem</servlet-name>
     	<url-pattern>/music</url-pattern>
   	</servlet-mapping>
-  
+  	
+  	<servlet>
+    	<servlet-name>Mp3</servlet-name>
+    	<servlet-class>com.kittypad.ringtone.Mp3ItemServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>Mp3</servlet-name>
+    	<url-pattern>/mp3</url-pattern>
+  	</servlet-mapping>
+  	
+  	
   	<servlet>
     	<servlet-name>Midi</servlet-name>
     	<servlet-class>com.kittypad.ringtone.MusicItemServlet</servlet-class>
   	</servlet>
   	<servlet-mapping>
-    	<servlet-name>MusicItem</servlet-name>
+    	<servlet-name>Midi</servlet-name>
     	<url-pattern>/music</url-pattern>
   	</servlet-mapping>
   	
