@@ -14,25 +14,26 @@ public class DBInitMidiHttpRequest {
 	static int items = 0;
 	static int globalCount = 1;
 	public static void main(String[] args) throws FileNotFoundException{
-		String path = "/Users/apple/Desktop/midi1";
-	//	String path1 = "/Users/apple/Desktop/midi2";
+	//	String path = "/Users/apple/Desktop/midi1";
+		String path1 = "/Users/apple/Desktop/midi2";
 	//	String path2 = "/Users/apple/Desktop/midi3";
-		File file = new File(path);
-	//	File file1 = new File(path1);
+	//	File file = new File(path);
+		File file1 = new File(path1);
 	//	File file2 = new File(path2);
-		System.out.println("Begin Scanning file "+ path);
+	/*	System.out.println("Begin Scanning file "+ path);
 		if(!file.exists()){
 			System.out.println("File Not Exist");
 		}
 		System.out.println("Begin generating music list and add it to database");
 		Init(file); //read all musiclist and add them to database
-		/*
+		*/
+		
 		if(!file1.exists()){
 			System.out.println("File Not Exist");
 		}
 		System.out.println("Begin generating music list and add it to database");
 		Init(file1); //read all musiclist and add them to database
-		
+		/*
 		if(!file2.exists()){
 			System.out.println("File Not Exist");
 		}
@@ -68,8 +69,8 @@ public class DBInitMidiHttpRequest {
 					String urlString = "http://kittypad-ring.appspot.com/music?keyStr="+URLEncoder.encode(id+musicName) + "&UUID="+id+
 							"&musicName=" + URLEncoder.encode(musicName)+
 							"&category="+URLEncoder.encode(category)+"&type="+URLEncoder.encode(type) +"&size="+size;
-					System.out.println(urlString);
-				/*	URL url;
+				//	System.out.println(urlString);
+					URL url;
 					System.out.println((globalCount++)+":"+musicName);
 					try {
 						url = new URL(urlString);
@@ -82,7 +83,7 @@ public class DBInitMidiHttpRequest {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						System.exit(0);
-					}*/
+					}
 					items++;
 				}
 			}
