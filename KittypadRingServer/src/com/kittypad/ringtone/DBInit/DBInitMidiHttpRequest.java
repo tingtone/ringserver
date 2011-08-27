@@ -15,7 +15,7 @@ public class DBInitMidiHttpRequest {
 	static int globalCount = 1;
 	public static void main(String[] args) throws FileNotFoundException{
 	//	String path = "/Users/apple/Desktop/midi1";
-		String path1 = "/Users/apple/Desktop/midi2";
+		String path1 = "/Users/apple/Desktop/midi2-1";
 	//	String path2 = "/Users/apple/Desktop/midi3";
 	//	File file = new File(path);
 		File file1 = new File(path1);

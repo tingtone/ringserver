@@ -22,6 +22,21 @@ public class FileProcessUtils {
 	//	String midiPath1 = "/Users/apple/Desktop/midi1/";
 	//	String midiPath2 = "/Users/apple/Desktop/midi2/";
 	//	processMidiFileName(midiPath);
+		String midiPath3 = "/Users/apple/Desktop/midi2-1/";
+		String m4rPath = "/Users/apple/Desktop/m4r/";
+		File file = new File(midiPath3);
+		System.out.println("Begin Scanning file "+ midiPath3);
+		if(!file.exists()){
+			System.out.println("File Not Exist");
+		}	
+		try {
+			generateMidiListFromS3Files(file);
+			System.out.println("Generate midi list over");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*
 		String m4rPath = "/Users/apple/Desktop/m4r/";
 		File file = new File(m4rPath);
 		System.out.println("Begin Scanning file "+ m4rPath);
@@ -35,6 +50,7 @@ public class FileProcessUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	/*	File file = new File(midiPath1);
 		System.out.println("Begin Scanning file "+ midiPath1);
 		if(!file.exists()){
@@ -60,6 +76,8 @@ public class FileProcessUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+		
+		
 	}
 	
 	private static void processMp3FileName(String path){
