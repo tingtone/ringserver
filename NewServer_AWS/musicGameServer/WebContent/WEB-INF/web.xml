@@ -43,7 +43,7 @@
     <description></description>
     <display-name>DownloadIncServlet</display-name>
     <servlet-name>DownloadIncServlet</servlet-name>
-    <servlet-class>ccom.kittypad.music.game.Servlet.DownloadIncServlet</servlet-class>
+    <servlet-class>com.kittypad.music.game.Servlet.DownloadIncServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DownloadIncServlet</servlet-name>

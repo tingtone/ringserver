@@ -237,6 +237,8 @@ public class UserMusicUtil {
 	      select="select * from userMusic order by \"add_date\" desc";
 	     
 	   }
+	   if(beginPos<0)
+		   beginPos=0;
 	    select+=" limit "+beginPos+" , "+ numItem ;
 	   if(DEBUG){
 	   	 System.out.println(select);

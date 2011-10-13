@@ -44,7 +44,7 @@ public class RateServlet extends HttpServlet {
 				new_value=UserMusicUtil.updateAvgRate(ringUrl, value);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				//e.printStackTrace();
+			//	resp.getOutputStream().write(e1.getMessage().getBytes());
 			} 
 			String response = new_value+"";
 			resp.getOutputStream().write(response.getBytes());
@@ -52,10 +52,10 @@ public class RateServlet extends HttpServlet {
 			
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			resp.getOutputStream().write(e1.getMessage().getBytes());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			resp.getOutputStream().write(e1.getMessage().getBytes());
 		}
 		
 	}

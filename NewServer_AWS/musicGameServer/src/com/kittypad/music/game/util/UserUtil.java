@@ -67,7 +67,7 @@ public class UserUtil {
 	 {
 
 		 
-			  String update="update User set userName=\""+user.getUserName()+"\", email=\""
+			  String update="update user set userName=\""+user.getUserName()+"\", email=\""
 			  +user.getEmail()+"\", location =\""+user.getLocation()+"\" where UUID=\""+user.getUUID()+"\"";
 		        statement.executeUpdate(update);
 				
@@ -77,7 +77,7 @@ public class UserUtil {
 	 {
 		
 		 
-			   String update="update User set kittypad_beans=\""+5+"\" where UUID=\""+UUID+"\"";
+			   String update="update user set kittypad_beans=\""+5+"\" where UUID=\""+UUID+"\"";
 		        statement.executeUpdate(update);
 		
 		
@@ -85,7 +85,7 @@ public class UserUtil {
 	 public static int getBaseBeans(String UUID) throws SQLException
 	 {
 		
-			   String select ="select * from User where UUID = \""+UUID+"\"";
+			   String select ="select * from user where UUID = \""+UUID+"\"";
 			   ResultSet result= statement.executeQuery(select);
 			   if(result.next()){
 				   int beans=result.getInt("kittypad_beans");  

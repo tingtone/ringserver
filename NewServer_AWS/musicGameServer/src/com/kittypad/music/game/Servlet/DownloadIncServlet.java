@@ -55,10 +55,10 @@ public class DownloadIncServlet extends HttpServlet {
 			resp.flushBuffer();
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			resp.getOutputStream().write(e1.getMessage().getBytes());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			resp.getOutputStream().write(e1.getMessage().getBytes());
 		}
 		
 	}

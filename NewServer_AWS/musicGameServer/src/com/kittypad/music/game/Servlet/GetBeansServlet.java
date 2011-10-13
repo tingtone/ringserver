@@ -45,19 +45,22 @@ public class GetBeansServlet extends HttpServlet {
 					ArrayList<Integer> array=UserMusicUtil.getItemDownloadCountsOfUser(UUID);
 					for(int i=0;i<array.size();i++)
 						beans+=(array.get(i)>4?4:array.get(i))*5;
-					resp.getOutputStream().write(beans);
+					resp.getOutputStream().write((beans+"").getBytes());
 					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					resp.getWriter().append(e.getMessage());
+					
+					resp.getOutputStream().write(e.getMessage().getBytes());
 				}
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			resp.getOutputStream().write(e1.getMessage().getBytes());
+		
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			resp.getOutputStream().write(e1.getMessage().getBytes());
 		}
+		resp.flushBuffer();
 	      
 		
 
