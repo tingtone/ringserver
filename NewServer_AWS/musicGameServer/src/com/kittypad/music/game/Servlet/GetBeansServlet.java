@@ -27,8 +27,7 @@ public class GetBeansServlet extends HttpServlet {
     public GetBeansServlet() throws ClassNotFoundException, SQLException {
         super();
         // TODO Auto-generated constructor stub
-        UserUtil.init();
-        UserMusicUtil.init();
+      
     }
 
 	/**
@@ -36,19 +35,30 @@ public class GetBeansServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String UUID=req.getParameter("UUID");
-		
-		try {
-			int beans=UserUtil.getBaseBeans(UUID);
-			ArrayList<Integer> array=UserMusicUtil.getItemDownloadCountsOfUser(UUID);
-			for(int i=0;i<array.size();i++)
-				beans+=(array.get(i)>4?4:array.get(i))*5;
-			resp.getOutputStream().write(beans);
-			
-		} catch (SQLException e) {
+		  try {
+			UserUtil.init();
+			UserMusicUtil.init();
+				String UUID=req.getParameter("UUID");
+				
+				try {
+					int beans=UserUtil.getBaseBeans(UUID);
+					ArrayList<Integer> array=UserMusicUtil.getItemDownloadCountsOfUser(UUID);
+					for(int i=0;i<array.size();i++)
+						beans+=(array.get(i)>4?4:array.get(i))*5;
+					resp.getOutputStream().write(beans);
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					resp.getWriter().append(e.getMessage());
+				}
+		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			resp.getWriter().append(e.getMessage());
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+	      
 		
 
 	}

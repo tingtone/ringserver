@@ -36,7 +36,7 @@ public class SearchServlet extends HttpServlet {
     public SearchServlet() throws ClassNotFoundException, SQLException {
         super();
         // TODO Auto-generated constructor stub
-        UserMusicUtil.init();
+       
         
     }
 
@@ -45,58 +45,67 @@ public class SearchServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		 try {
+			UserMusicUtil.init();
+			String key = req.getParameter("q");
+			String startStr = req.getParameter("start");
+			String type = req.getParameter("type");
+			String platform = req.getParameter("platform");
+			if(platform == null){
+				platform = "android";
+				
+			}
+			int start = 0;
+			if (startStr != null) {
+				start = Integer.parseInt(startStr);
+			}
+			JSONArray jsonArray = new JSONArray();
 		
-		String key = req.getParameter("q");
-		String startStr = req.getParameter("start");
-		String type = req.getParameter("type");
-		String platform = req.getParameter("platform");
-		if(platform == null){
-			platform = "android";
+				List<MusicItem> searchResults = null;
+		   try{
+			    
+				if(type == null || type.equals("keyword")){
+					searchResults =UserMusicUtil.getResultsByKeyword(platform,key, start);
+				}
+				else if(type.equals("category")){
+					searchResults = UserMusicUtil.getResultsByCategory(platform,key, start);
+				}
+				else if(type.equals("download_count")){
+					searchResults = UserMusicUtil.getResultsByDownloadCount(platform,start);
+				}
+				else if(type.equals("add_date")){
+					searchResults = UserMusicUtil.getResultsByDate(platform,start);
+				}
+				else if(type.equals("artist")){
+					searchResults = UserMusicUtil.getResultsByArtist(platform,key, start);
+				}
+				else if(type.equals("random")) {
+					searchResults =UserMusicUtil.getResultsByRandom(platform);
+				}
 			
+				for (MusicItem musicItem : searchResults) {
+					Map<String, String> musicMap=musicItem.josonMap();
+					jsonArray.put(musicMap);
+				}
+			String response = null;
+			response = jsonArray.toString();
+			resp.getOutputStream().write(response.getBytes());
+			resp.flushBuffer();
+		   }catch(Exception e){
+			   e.printStackTrace(resp.getWriter());
+			  // e.printStackTrace( resp.getOutputStream());
+			   resp.flushBuffer();
+			
+		   }
+		 
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		int start = 0;
-		if (startStr != null) {
-			start = Integer.parseInt(startStr);
-		}
-		JSONArray jsonArray = new JSONArray();
-	
-			List<MusicItem> searchResults = null;
-	   try{
-		    
-			if(type == null || type.equals("keyword")){
-				searchResults =UserMusicUtil.getResultsByKeyword(platform,key, start);
-			}
-			else if(type.equals("category")){
-				searchResults = UserMusicUtil.getResultsByCategory(platform,key, start);
-			}
-			else if(type.equals("download_count")){
-				searchResults = UserMusicUtil.getResultsByDownloadCount(platform,start);
-			}
-			else if(type.equals("add_date")){
-				searchResults = UserMusicUtil.getResultsByDate(platform,start);
-			}
-			else if(type.equals("artist")){
-				searchResults = UserMusicUtil.getResultsByArtist(platform,key, start);
-			}
-			else if(type.equals("random")) {
-				searchResults =UserMusicUtil.getResultsByRandom(platform);
-			}
 		
-			for (MusicItem musicItem : searchResults) {
-				Map<String, String> musicMap=musicItem.josonMap();
-				jsonArray.put(musicMap);
-			}
-		String response = null;
-		response = jsonArray.toString();
-		resp.getOutputStream().write(response.getBytes());
-		resp.flushBuffer();
-	   }catch(Exception e){
-		   e.printStackTrace(resp.getWriter());
-		  // e.printStackTrace( resp.getOutputStream());
-		   resp.flushBuffer();
-		
-	   }
-	 
 	}
 
 	

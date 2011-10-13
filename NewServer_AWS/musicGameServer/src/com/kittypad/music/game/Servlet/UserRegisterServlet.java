@@ -30,23 +30,33 @@ public class UserRegisterServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String UUID=req.getParameter("UUID");
-		String userName=req.getParameter("userName");
-		if(userName==null)
-			userName="";
-		String location=req.getParameter("location");
-		if(location==null)
-			location="";
-		String email=req.getParameter("email");
-		if(email==null)
-			email="";
-		UserItem user=new UserItem(UUID,email,userName,location,false);
-		
 		try {
-			UserUtil.registerItem(user);
-		} catch (SQLException e) {
+			UserUtil.init();
+			String UUID=req.getParameter("UUID");
+			String userName=req.getParameter("userName");
+			if(userName==null)
+				userName="";
+			String location=req.getParameter("location");
+			if(location==null)
+				location="";
+			String email=req.getParameter("email");
+			if(email==null)
+				email="";
+			UserItem user=new UserItem(UUID,email,userName,location,false);
+			
+			try {
+				UserUtil.registerItem(user);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				resp.getWriter().append(e.getMessage());
+			}
+			
+		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			resp.getWriter().append(e.getMessage());
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		

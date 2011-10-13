@@ -26,10 +26,10 @@ public class DownloadIncServlet extends HttpServlet {
      * @throws ClassNotFoundException 
      * @see HttpServlet#HttpServlet()
      */
-    public DownloadIncServlet() throws ClassNotFoundException, SQLException {
+    public DownloadIncServlet()  {
         super();
         // TODO Auto-generated constructor stub
-        MusicUtil.init();
+       
     }
 
 	/**
@@ -37,19 +37,28 @@ public class DownloadIncServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		String ringUrl=req.getParameter("ID_Name");
-		int new_download_count=-1;
-		try {
-			 
-			 new_download_count=MusicUtil.downloadCountIncrease(ringUrl);
-		} catch (SQLException e) {
+		 try {
+			MusicUtil.init();
+			String ringUrl=req.getParameter("ID_Name");
+			int new_download_count=-1;
+			try {
+				 
+				 new_download_count=MusicUtil.downloadCountIncrease(ringUrl);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			} 
+			String response = new_download_count+"";
+			resp.getOutputStream().write(response.getBytes());
+			resp.flushBuffer();
+		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		} 
-		String response = new_download_count+"";
-		resp.getOutputStream().write(response.getBytes());
-		resp.flushBuffer();
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	}
 
 	/**

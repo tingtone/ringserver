@@ -67,83 +67,58 @@ public class UploadServlet extends HttpServlet {
     public UploadServlet() throws IOException, ClassNotFoundException, SQLException {
         super();
         // TODO Auto-generated constructor stub
-        UserMusicUtil.init();
-        UserUtil.init();
-       manager=new S3StorageManager();
+      
         
     }
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		 InputStream stream = null;
-		    stream=req.getInputStream();
-		    String UUID=req.getParameter("UUID");
-		    String musicName=req.getParameter("musicName");
-		    String type=req.getParameter("type");
-		    String artist=req.getParameter("artist");
-		    if(artist==null)
-		    	artist="unknown";
-		    String category=req.getParameter("category");
-		    if(category==null)
-		    	category="";
-		    int size=Integer.parseInt(req.getParameter("size"));
-		    MusicItem musicItem=new MusicItem(UUID,artist,musicName,category,type,size,bucketName);	  
-			byte [] array=new byte[size];
-			stream.read(array,0,size);
-		    manager.storePublicRead(musicItem, array, true);
-		    UserItem userItem;
-		    if(size>SIZE_THRESHOLD)
-		         userItem=new UserItem(UUID,"","","",true);
-		    else
-		    	userItem=new UserItem(UUID,"","","",false);
-		    try {
-				UserMusicUtil.insertItem(musicItem);
-				UserUtil.insertItem(userItem);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				resp.getWriter().append(e.getMessage());
-			}
-			
-	 
-	}
-
 	
-
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		 InputStream stream = null;
-		    stream=req.getInputStream();
-		    String UUID=req.getParameter("UUID");
-		    String musicName=req.getParameter("musicName");
-		    String type=req.getParameter("type");
-		    String artist=req.getParameter("artist");
-		    if(artist==null)
-		    	artist="unknown";
-		    String category=req.getParameter("category");
-		    if(category==null)
-		    	category=type;
-		    int size=Integer.parseInt(req.getParameter("size"));
-		    MusicItem musicItem=new MusicItem(UUID,artist,musicName,category,type,size,bucketName);	  
-			byte [] array=new byte[size];
-			stream.read(array,0,size);
-		    manager.storePublicRead(musicItem, array, true);
-		    UserItem userItem;
-		    if(size>SIZE_THRESHOLD)
-		         userItem=new UserItem(UUID,"","","",true);
-		    else
-		    	userItem=new UserItem(UUID,"","","",false);
-		    try {
-				UserMusicUtil.insertItem(musicItem);
-				UserUtil.insertItem(userItem);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				resp.getWriter().append(e.getMessage());
-			}
-			
-		    
+		  try {
+			UserMusicUtil.init();
+			  UserUtil.init();
+		       manager=new S3StorageManager();
+			 InputStream stream = null;
+			    stream=req.getInputStream();
+			    String UUID=req.getParameter("UUID");
+			    String musicName=req.getParameter("musicName");
+			    String type=req.getParameter("type");
+			    String artist=req.getParameter("artist");
+			    if(artist==null)
+			    	artist="unknown";
+			    String category=req.getParameter("category");
+			    if(category==null)
+			    	category=type;
+			    int size=Integer.parseInt(req.getParameter("size"));
+			    MusicItem musicItem=new MusicItem(UUID,artist,musicName,category,type,size,bucketName);	  
+				byte [] array=new byte[size];
+				stream.read(array,0,size);
+			    manager.storePublicRead(musicItem, array, true);
+			    UserItem userItem;
+			    if(size>SIZE_THRESHOLD)
+			         userItem=new UserItem(UUID,"","","",true);
+			    else
+			    	userItem=new UserItem(UUID,"","","",false);
+			    try {
+					UserMusicUtil.insertItem(musicItem);
+					UserUtil.insertItem(userItem);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					resp.getWriter().append(e.getMessage());
+				}
+				
+			    
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	      
 
  
 	}

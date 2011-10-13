@@ -24,7 +24,7 @@ public class RateServlet extends HttpServlet {
     public RateServlet() throws ClassNotFoundException, SQLException {
         super();
         // TODO Auto-generated constructor stub
-        MusicUtil.init();
+        
     }
 
 	/**
@@ -32,20 +32,30 @@ public class RateServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String ringUrl=req.getParameter("ID_Name");
-		String rateValue=req.getParameter("rateValue");
-		int value=Integer.parseInt(rateValue);
-		int new_value=-1;
 		try {
-			 
-			new_value=MusicUtil.updateAvgRate(ringUrl, value);
-		} catch (SQLException e) {
+			MusicUtil.init();
+			String ringUrl=req.getParameter("ID_Name");
+			String rateValue=req.getParameter("rateValue");
+			int value=Integer.parseInt(rateValue);
+			int new_value=-1;
+			try {
+				 
+				new_value=MusicUtil.updateAvgRate(ringUrl, value);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			} 
+			String response = new_value+"";
+			resp.getOutputStream().write(response.getBytes());
+			resp.flushBuffer();
+			
+		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		} 
-		String response = new_value+"";
-		resp.getOutputStream().write(response.getBytes());
-		resp.flushBuffer();
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 	}
 
