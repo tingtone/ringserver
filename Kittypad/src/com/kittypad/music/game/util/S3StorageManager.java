@@ -67,7 +67,7 @@ public class S3StorageManager {
 			if(s3client==null){
 			try {
 				s3client=new AmazonS3Client(new PropertiesCredentials(
-				        S3StorageManager.class.getClassLoader().getResourceAsStream("/AwsCredentials.properties")));
+				        S3StorageManager.class.getClassLoader().getResourceAsStream("./AwsCredentials.properties")));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -111,6 +111,26 @@ public class S3StorageManager {
 			s3client.setObjectAcl(bucketName, key, acl);
 		}
 	}
+	public  void store(NewSongItem obj,DataInputStream stream ,boolean reducedRedundancy, CannedAccessControlList acl) {
+		// Make sure the bucket exists before we try to use it
+		//checkForAndCreateBucket(this.bucketName);
+		String key=obj.getMusicName()+obj.getSize()+".mid";
+		ObjectMetadata omd = new ObjectMetadata();
+		omd.setContentType(mimeType);
+		omd.setContentLength(obj.getSize());
+		//ByteArrayInputStream is = new ByteArrayInputStream(data);
+		PutObjectRequest request = new PutObjectRequest(bucketName, key,stream,omd);
+		// Check if reduced redundancy is enabled
+		if (reducedRedundancy) {
+			request.setStorageClass(StorageClass.ReducedRedundancy);
+		}
+		s3client.putObject(request);
+		// If we have an ACL set access permissions for the the data on S3
+		if (acl!=null) {
+			s3client.setObjectAcl(bucketName, key, acl);
+		}
+	}
+
 
 	
 
@@ -123,7 +143,9 @@ public class S3StorageManager {
 	public  void storePublicRead (MusicItem obj,DataInputStream stream, boolean reducedRedundancy) {
 		store(obj,stream,reducedRedundancy,CannedAccessControlList.PublicRead);
 	}
-
+	public  void storePublicRead (NewSongItem obj,DataInputStream stream, boolean reducedRedundancy) {
+		store(obj,stream,reducedRedundancy,CannedAccessControlList.PublicRead);
+	}
 	
 
 }

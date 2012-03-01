@@ -129,5 +129,54 @@
     <servlet-name>GetCategoryServlet</servlet-name>
     <url-pattern>/game/CategoryList</url-pattern>
   </servlet-mapping>
-
+  <servlet>
+    <description></description>
+    <display-name>AppVersionServlet</display-name>
+    <servlet-name>AppVersionServlet</servlet-name>
+    <servlet-class>com.kittypad.music.game.Servlet.AppVersionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AppVersionServlet</servlet-name>
+    <url-pattern>/game/AppVersion</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>addAppVersionServlet</display-name>
+    <servlet-name>addAppVersionServlet</servlet-name>
+    <servlet-class>com.kittypad.music.game.Servlet.addAppVersionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addAppVersionServlet</servlet-name>
+    <url-pattern>/game/addAppVersion</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UserInfoServlet</display-name>
+    <servlet-name>UserInfoServlet</servlet-name>
+    <servlet-class>com.kittypad.music.game.Servlet.UserInfoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserInfoServlet</servlet-name>
+    <url-pattern>/game/UserInfo</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>NewSongServlet</display-name>
+    <servlet-name>NewSongServlet</servlet-name>
+    <servlet-class>com.kittypad.music.game.Servlet.NewSongServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewSongServlet</servlet-name>
+    <url-pattern>/game/NewSong</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UploadNewSongServlet</display-name>
+    <servlet-name>UploadNewSongServlet</servlet-name>
+    <servlet-class>com.kittypad.music.game.Servlet.UploadNewSongServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadNewSongServlet</servlet-name>
+    <url-pattern>/game/UploadNewSong</url-pattern>
+  </servlet-mapping>
 </web-app>

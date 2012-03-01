@@ -1,5 +1,10 @@
 package com.kittypad.music.game.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.kittypad.music.game.translate.MTranslate;
+
 
 public class UserItem {
 	
@@ -13,6 +18,7 @@ public class UserItem {
 		this.UUID=UUID;
 		this.email=email;
 		this.userName=userName;
+		this.location=location;
 		this.kittyad_beans=kittypad_beans;
 		
 	}
@@ -27,7 +33,15 @@ public class UserItem {
 			this.kittyad_beans=0;
 		this.location=location;
 	}
-	
+	public Map<String,String> josonMap(){
+		Map<String, String> userMap = new HashMap<String, String>();
+		userMap.put("UUID", UUID);
+		userMap.put("userName",userName);
+		userMap.put("email", email);
+		
+       return userMap;
+	   
+	}
 
 
 	public String getUUID() {

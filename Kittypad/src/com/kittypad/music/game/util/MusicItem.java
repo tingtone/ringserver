@@ -160,6 +160,12 @@ public Map<String,String> josonMap(String lang){
        return musicMap;
 	   
 	}
+public Map<String,String> josonMap(String lang,int row){
+	Map<String, String> musicMap = josonMap(lang);
+	musicMap.put("row", Integer.toString(row));
+    return musicMap;
+   
+}
 	public String getEnName(){
 		String enName;
 		try {

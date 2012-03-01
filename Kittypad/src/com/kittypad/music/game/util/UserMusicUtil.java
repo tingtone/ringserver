@@ -349,14 +349,14 @@ public class UserMusicUtil {
     
 	 public static ArrayList<MusicItem> getResultByUser(String UUID) throws SQLException, UnsupportedEncodingException
 	 {
-	     String select="select * from userMusic where UUID=\""+UUID+"\" and awarded= \"false\"" ; 
+	     String select="select * from userMusic where UUID=\""+UUID+"\" and awarded= 0 order by download_count desc" ; 
 		  ResultSet result=statement.executeQuery(select);
           return transfer(result);	    	
 			    
 	 }
 	 public static void updateAwarded(String ID_Name) throws SQLException
 	 {
-		 String update="update userMusic set awarded=\"true\" where ID_Name=\""+ID_Name+"\"" ;
+		 String update="update userMusic set awarded = 1 where ID_Name=\""+ID_Name+"\"" ;
 		 statement.executeUpdate(update);
 		 
 	 }
@@ -371,6 +371,7 @@ public class UserMusicUtil {
 			CategoryItem category=new CategoryItem(result.getString(1),result.getInt(2));
 			list.add(category); 
 		 }
+		 
 			
 		 return list;
 	 }

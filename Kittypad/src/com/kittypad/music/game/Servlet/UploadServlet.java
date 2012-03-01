@@ -97,12 +97,13 @@ public class UploadServlet extends HttpServlet {
 			    }
 			    String category=req.getParameter("category");
 			    if(category==null){
-			    	category=type;
+			    	category="MIDI";
 			    }else{
 			    	category=new String(category.getBytes("ISO-8859-1"),"utf-8");
 			    	
 			    }  
 			    int size=Integer.parseInt(req.getParameter("size"));
+			    int row =Integer.parseInt(req.getParameter("row"));
 			    MusicItem musicItem=new MusicItem(UUID,artist,musicName,category,type,size,bucketName);	
 			    DataInputStream data=new DataInputStream(stream);
 			    
@@ -120,15 +121,15 @@ public class UploadServlet extends HttpServlet {
 				//UserUtil.disconnect();
 				UserMusicUtil.disconnect();
 				JSONArray jsonArray = new JSONArray();
-				jsonArray.put(musicItem.josonMap("en"));
+				jsonArray.put(musicItem.josonMap("en",0));
 				resp.getOutputStream().write(jsonArray.toString().getBytes());
 			    
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			resp.getOutputStream().write(e1.getMessage().getBytes());
+			resp.getOutputStream().write("classNotFoundException".getBytes());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			resp.getOutputStream().write(e1.getMessage().getBytes());
+			resp.getOutputStream().write("SQLException".getBytes());
 		}
 
  

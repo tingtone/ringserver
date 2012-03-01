@@ -8,20 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.amazonaws.util.json.JSONArray;
 import com.kittypad.music.game.util.UserItem;
 import com.kittypad.music.game.util.UserUtil;
 
 /**
- * Servlet implementation class UserRegisterServlet
+ * Servlet implementation class UserInfoServlet
  */
-public class UserRegisterServlet extends HttpServlet {
+public class UserInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int recommendedBeans=1;
-	private static final String success="success";  
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserRegisterServlet() {
+    public UserInfoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,56 +34,40 @@ public class UserRegisterServlet extends HttpServlet {
 		try {
 			UserUtil.init();
 			String UUID=new String(req.getParameter("UUID").getBytes("ISO-8859-1"),"utf-8");
-			
-			String userName=req.getParameter("userName");
-			if(userName==null)
-				userName="";
-			else
-				userName=new String(userName.getBytes("ISO-8859-1"),"utf-8");
-			String location=req.getParameter("location");
-			if(location==null)
-				location="";
-			else
-				location=new String(location.getBytes("ISO-8859-1"),"utf-8");
-			String email=req.getParameter("email");
-			if(email==null)
-				email="";
-			String recommender=req.getParameter("recommender");
-
-			
-			UserItem user=new UserItem(UUID,email,userName,location,false);
-			
+			JSONArray jsonArray = new JSONArray();
 			try {
-				UserUtil.registerItem(user);
-				if(recommender!=null)
-				{
-					recommender=new String(recommender.getBytes("ISO-8859-1"),"utf-8");
-					if(!recommender.equals(userName))
-					   UserUtil.updateBeans(recommender,recommendedBeans);
-				}
-				resp.getOutputStream().write(success.getBytes());
-			
+				UserItem userItem=UserUtil.getUserItem(UUID);
+				if(userItem!=null)
+					jsonArray.put(userItem.josonMap());
+				String response = jsonArray.toString();
+				resp.getOutputStream().write(response.getBytes());
+				resp.flushBuffer();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+				
 				resp.getWriter().append(e.getMessage());
 			}
 			UserUtil.disconnect();
 			
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
+			
 			resp.getOutputStream().write(e1.getMessage().getBytes());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
+			
 			resp.getOutputStream().write(e1.getMessage().getBytes());
 		}
 		
 		
 	}
 
+	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 

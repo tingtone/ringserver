@@ -2,28 +2,32 @@ package com.kittypad.music.game.Servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kittypad.music.game.util.UserMusicUtil;
-import com.kittypad.music.game.util.UserUtil;
+import com.amazonaws.util.json.JSONArray;
+import com.kittypad.music.game.util.AppItem;
+import com.kittypad.music.game.util.AppUtil;
+import com.kittypad.music.game.util.NewSongItem;
+import com.kittypad.music.game.util.NewSongUtil;
 
 /**
- * Servlet implementation class PushBeansServlet
+ * Servlet implementation class NewSongServlet
  */
-public class PullBeansServlet extends HttpServlet {
+public class NewSongServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private static final int pullBeans=-1;
-    private static final String success="success";
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PullBeansServlet() {
+    public NewSongServlet() {
         super();
         // TODO Auto-generated constructor stub
+      
     }
 
 	/**
@@ -31,28 +35,26 @@ public class PullBeansServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		int index=Integer.parseInt(req.getParameter("index"));
 		try {
-			UserUtil.init();
-			req.setCharacterEncoding("UTF-8");
-			String UUID=req.getParameter("UUID");
-			int count=Integer.parseInt(req.getParameter("count"));
-			try {
-				UserUtil.updateBeans(UUID, pullBeans*count);
-				resp.getOutputStream().write(success.getBytes());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				resp.getOutputStream().write(e.getMessage().getBytes());
-			} 
-			UserUtil.disconnect();
-		
-		} catch (ClassNotFoundException e1) {
+			NewSongUtil.init();
+			JSONArray jsonArray = new JSONArray();
+			 NewSongItem newSongItem=NewSongUtil.getRecommendSong(index);
+			if(newSongItem!=null){
+			Map<String, String> songMap=newSongItem.josonMap();
+			jsonArray.put(songMap);
+			}
+			String response = null;
+			response = jsonArray.toString();
+			resp.getOutputStream().write(response.getBytes());
+			resp.flushBuffer();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			resp.getOutputStream().write(e1.getMessage().getBytes());
-		} catch (SQLException e1) {
+			e.printStackTrace();
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			resp.getOutputStream().write(e1.getMessage().getBytes());
+			e.printStackTrace();
 		}
-		
 		
 	}
 

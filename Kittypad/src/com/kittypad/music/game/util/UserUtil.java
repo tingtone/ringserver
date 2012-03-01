@@ -55,6 +55,18 @@ public class UserUtil {
 			
 		 
 	 }
+	 public static UserItem getUserItem(String UUID) throws SQLException{
+		 String select ="select * from user where UUID = \""+UUID+"\"";
+		   ResultSet result= statement.executeQuery(select);
+		   if(result.next())
+		    return  new UserItem(
+   				result.getString(1),
+   				result.getString(3),
+   				result.getString(2),
+   				result.getString(4),
+   				result.getInt(5));
+		  return null;
+	 }
 	 public static void registerItem(UserItem user) throws SQLException, UnsupportedEncodingException
 	 {
 		PreparedStatement ps=null;
